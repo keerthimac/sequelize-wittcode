@@ -62,7 +62,10 @@ const User = sequelize.define(
     }
 );
 
-// Basic Syncing of table
+
+// Insert Data into the Tables
+
+//-------------------------------------------------------------------------
 
 // Method 01
 //Using build method to add data to database
@@ -130,37 +133,60 @@ const User = sequelize.define(
 // Method 03
 // use BulkCreate method to add data to database
 
+// User.sync({ alter: true })
+//     .then(() => {
+//         return User.bulkCreate([{
+//             username: "John",
+//             password: "12345",
+//             age: 25,
+//         },
+//         {
+//             username: 'Darshana',
+//             password: 123456,
+//             age: 25
+//         },
+//         {
+//             username: 'pubudu',
+//             password: 654321,
+//             age: 29
+//         }]);
+//         //return used for chaining the promise
+//     })
+//     .then((data) => { //return because of array has to be use forEach method
+//         data.forEach(element => {
+//             console.log(element.toJSON());
+//         });
+
+
+//     })
+//     // .then((data) => {
+//     //   console.log("Data updated");
+//     //   console.log(data.toJSON());
+//     // })
+
+//     .catch((err) => {
+//         console.log(err);
+//     });
+
+
+//----------------------------------------------------------------------------------------
+
+// Model Querying
+
+//Method 01 
+//Get all the element in table
+
+
 User.sync({ alter: true })
     .then(() => {
-        return User.bulkCreate([{
-            username: "John",
-            password: "12345",
-            age: 25,
-        },
-        {
-            username: 'Darshana',
-            password: 123456,
-            age: 25
-        },
-        {
-            username: 'pubudu',
-            password: 654321,
-            age: 29
-        }]);
-        //return used for chaining the promise
-    })
-    .then((data) => { //return because of array has to be use forEach method
+        //return User.findAll() //return all the data in table
+        //return User.findAll({ attributes: [['username', 'username'], ['password', 'pwd']] }) // return data from specific specific column // 2nd argument is in the array is column heading ('alias') 
+        return User.findAll({ attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'howOld']] })
+    }).then((data) => {
         data.forEach(element => {
-            console.log(element.toJSON());
+            console.log(element.toJSON())
         });
-
-
     })
-    // .then((data) => {
-    //   console.log("Data updated");
-    //   console.log(data.toJSON());
-    // })
-
     .catch((err) => {
         console.log(err);
     });
