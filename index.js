@@ -1,11 +1,11 @@
 const Sequelize = require("sequelize"); //constructor
-const mysql = require("mysql2");
+const { DataTypes, Op } = require("sequelize");
 
 //Create new instant from class
 const sequelize = new Sequelize("sequelize_test", "root", "0542222175", {
-    //host:localhost, //Default Value
-    //port: 3306, //Default Value
-    dialect: "mysql",
+  //host:localhost, //Default Value
+  //port: 3306, //Default Value
+  dialect: "mysql",
 });
 
 // async function myFunction() {
@@ -17,13 +17,13 @@ const sequelize = new Sequelize("sequelize_test", "root", "0542222175", {
 
 //authenticate to database
 sequelize
-    .authenticate()
-    .then(() => {
-        console.log("connection successful");
-    })
-    .catch((err) => {
-        console.log("error connecting to database");
-    });
+  .authenticate()
+  .then(() => {
+    console.log("connection successful");
+  })
+  .catch((err) => {
+    console.log("error connecting to database");
+  });
 
 //sync all the table in database (OPTIONAL)
 // sequelize
@@ -37,31 +37,30 @@ sequelize
 
 //Create new table
 const User = sequelize.define(
-    "user",
-    {
-        id: {
-            type: Sequelize.DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        username: {
-            type: Sequelize.DataTypes.STRING,
-            allowNull: false,
-        },
-        password: {
-            type: Sequelize.DataTypes.STRING,
-        },
-        age: {
-            type: Sequelize.DataTypes.INTEGER,
-            defaultValue: 25,
-        },
+  "user",
+  {
+    id: {
+      type: Sequelize.DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-        freezeTableName: true,
-        timestamps: false,
-    }
+    username: {
+      type: Sequelize.DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: Sequelize.DataTypes.STRING,
+    },
+    age: {
+      type: Sequelize.DataTypes.INTEGER,
+      defaultValue: 25,
+    },
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+  }
 );
-
 
 // Insert Data into the Tables
 
@@ -90,9 +89,6 @@ const User = sequelize.define(
 //   .catch((err) => {
 //     console.log(err);
 //   });
-
-
-
 
 // Method 02
 // use create method to add data to database
@@ -128,8 +124,6 @@ const User = sequelize.define(
 //     console.log(err);
 //   });
 
-
-
 // Method 03
 // use BulkCreate method to add data to database
 
@@ -157,7 +151,6 @@ const User = sequelize.define(
 //             console.log(element.toJSON());
 //         });
 
-
 //     })
 //     // .then((data) => {
 //     //   console.log("Data updated");
@@ -168,25 +161,44 @@ const User = sequelize.define(
 //         console.log(err);
 //     });
 
-
 //----------------------------------------------------------------------------------------
 
 // Model Querying
 
-//Method 01 
+//Method 01
 //Get all the element in table
 
-
 User.sync({ alter: true })
-    .then(() => {
-        //return User.findAll() //return all the data in table
-        //return User.findAll({ attributes: [['username', 'username'], ['password', 'pwd']] }) // return data from specific specific column // 2nd argument is in the array is column heading ('alias') 
-        return User.findAll({ attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'howOld']] })
-    }).then((data) => {
-        data.forEach(element => {
-            console.log(element.toJSON())
-        });
-    })
-    .catch((err) => {
-        console.log(err);
+  .then(() => {
+    //return User.findAll() //return all the data in table
+    //return User.findAll({ attributes: [['username', 'username'], ['password', 'pwd']] }) // return data from specific specific column // 2nd argument is in the array is column heading ('alias')
+    //return User.findAll({ attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'howOld']] }) // aggregate functions can be run like this "SUM" "AVG" "MAX" "MIN" "COUNT"
+    //return User.findAll({ attributes: { exclude: ["password"] } }); // exclude attribute is used to exclude specific column from database
+    //return User.findAll({ where: { username: "John", age: 25 } }); // where attribute is used to filter data from database
+    //return User.findAll({ limit: 2, offset: 5 }); // limit and offset attribute is used to limit the data from database
+    //return User.findAll({ order: [["age", "DESC"]] }); // order attribute is used to sort the data from database
+    //return User.findAll({ order: [["age", "ASC"]] });
+    // return User.findAll({
+    //   attributes: [
+    //     "username",
+    //     [sequelize.fn("AVG", sequelize.col("age")), "AVG_age"],
+    //   ],
+    //   group: "username",
+    // }) // group attribute is used to group the data from database. commonly used with aggregate functions.
+
+    //return User.findAll({ where: { age: { [Op.gt]: 25 } } }); // where attribute is used to filter data from database
+    //return User.findAll({ where: { [Op.or]: { username: "jhon", age: 25 } } }); //Using operators like OR, AND, NOT, BETWEEN, IN, etc.
+    //return User.findAll({ where: { age: { [Op.between]: [25, 30] } } }); // BETWEEN operator is used to filter data from database
+    //return User.findAll({ where: { age: { [Op.gt]: 25 } } }); // GREATER operator is used to filter data from database
+    return User.findAll({
+      where: { age: { [Op.gt]: { [Op.lt]: 45, [Op.eq]: null } } },
     });
+  })
+  .then((data) => {
+    data.forEach((element) => {
+      console.log(element.toJSON());
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
