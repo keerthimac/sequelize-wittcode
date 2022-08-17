@@ -4,4 +4,5 @@ module.exports = {
   PASSWORD: "0542222175",
   DB: "sequelize_test",
   DIALECT: "mysql",
+  TIMEZONE: "+05:30",
 };

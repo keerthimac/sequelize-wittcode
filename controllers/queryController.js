@@ -31,7 +31,7 @@ const findAllMethod = asyncHandler(async (req, res) => {
   const where1 = await User.findAll({ where: { username: "John", age: 25 } });
 
   // limit and offset attribute is used to limit the data from database
-  const limitNoffset = await User.findAll({ limit: 2, offset: 5 });
+  const limitAndOffset = await User.findAll({ limit: 2, offset: 5 });
 
   // order attribute is used to sort the data from database
   const orderDesc = await User.findAll({ order: [["age", "DESC"]] });
@@ -50,7 +50,7 @@ const findAllMethod = asyncHandler(async (req, res) => {
   // GREATER operator is used to filter data from database
   const operators3 = await User.findAll({ where: { age: { [Op.gt]: 25 } } });
 
-  res.status(200).json(minMaxCount);
+  res.status(200).json(operators2);
 });
 
 module.exports = {

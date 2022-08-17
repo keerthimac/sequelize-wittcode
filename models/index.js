@@ -5,7 +5,7 @@ const { Sequelize, DataTypes } = require("sequelize"); //constructor
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST, //Default Value "local host"
   dialect: dbConfig.DIALECT, ////Default Value "mysql"
-  timezone: "+05:30",
+  timezone: dbConfig.TIMEZONE,
 });
 
 //authenticate to database
