@@ -28,12 +28,13 @@ const db = {};
 db.sequelize = sequelize;
 
 // making user model to db object
-db.user = require("./userModel")(sequelize, DataTypes);
+db.users = require("./userModel")(sequelize, DataTypes);
+db.posts = require("./postModel")(sequelize, DataTypes);
 
 //sync all the table in database (OPTIONAL)
 const syncTables = async () => {
   try {
-    await db.sequelize.sync({ alter: true });
+    await db.sequelize.sync({ force: true });
     console.log("table sync successful".cyan.underline);
   } catch (error) {
     console.log(`Error:${error.message}`.red.underline.bold);
@@ -43,11 +44,11 @@ const syncTables = async () => {
 connectDB();
 // syncTables(); // optional -  When create new table
 
-//define Relationships
-//one to many relationship between user and tickets
+// define Relationships
+// one to many relationship between user and posts
 
-// db.user.hasMany(db.ticket);
-// db.ticket.belongsTo(db.user);
+db.users.hasMany(db.posts, { foreignKey: "userId" });
+db.posts.belongsTo(db.users, { foreignKey: "userId" });
 
 //export db object
 module.exports = db;

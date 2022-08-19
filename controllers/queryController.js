@@ -50,7 +50,7 @@ const findAllMethod = asyncHandler(async (req, res) => {
   // GREATER operator is used to filter data from database
   const operators3 = await User.findAll({ where: { age: { [Op.gt]: 25 } } });
 
-  res.status(200).json(operators2);
+  res.status(200).json(operators3);
 });
 
 module.exports = {

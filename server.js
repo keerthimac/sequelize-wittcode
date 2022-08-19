@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 //Routes
 app.use("/api/insert", require("./routes/insertRoutes"));
 app.use("/api/query", require("./routes/queryRoutes"));
+app.use("/api/association", require("./routes/associationRoutes"));
 // app.use("/api/tickets", require("./routes/ticketRoutes"));
 
 app.use(errorHandler);

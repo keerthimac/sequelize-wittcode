@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const db = require("../models");
-const User = db.user;
+const User = db.users;
 
 // Method 01
 // @desc Using build method to add data to database
